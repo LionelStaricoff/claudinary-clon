@@ -1,0 +1,88 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+            <i class="fas fa-image me-2"></i>
+            <span>ImageHost</span>
+        </a>
+        
+        <!-- Mobile Toggle Button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Navigation Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}" th:class="${active == 'home' ? 'active' : ''}">
+                        <i class="fas fa-home me-1"></i> Home
+                    </a>
+                </li>
+                
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/gallery}" th:class="${active == 'gallery' ? 'active' : ''}">
+                        <i class="fas fa-images me-1"></i> Gallery
+                    </a>
+                </li>
+                
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/upload}" th:class="${active == 'upload' ? 'active' : ''}">
+                        <i class="fas fa-upload me-1"></i> Upload
+                    </a>
+                </li>
+                
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/projects}" th:class="${active == 'projects' ? 'active' : ''}">
+                        <i class="fas fa-folder me-1"></i> Projects
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/about}" th:class="${active == 'about' ? 'active' : ''}">
+                        <i class="fas fa-info-circle me-1"></i> About
+                    </a>
+                </li>
+                
+                <!-- Admin Only -->
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/admin}" th:class="${active == 'admin' ? 'active' : ''}">
+                        <i class="fas fa-cog me-1"></i> Admin
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- Right Side - Authentication -->
+            <ul class="navbar-nav">
+                <!-- If authenticated -->
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/profile}" th:class="${active == 'profile' ? 'active' : ''}">
+                        <i class="fas fa-user me-1"></i> 
+                        <span th:text="${#authentication.name}"></span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/api/auth/logout}" method="post" class="d-inline">
+                        <button type="submit" class="nav-link btn btn-link text-white">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </button>
+                    </form>
+                </li>
+                
+                <!-- If not authenticated -->
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/login}" th:class="${active == 'login' ? 'active' : ''}">
+                        <i class="fas fa-sign-in-alt me-1"></i> Login
+                    </a>
+                </li>
+                
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/register}" th:class="${active == 'register' ? 'active' : ''}">
+                        <i class="fas fa-user-plus me-1"></i> Register
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

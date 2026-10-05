@@ -1,0 +1,64 @@
+# Java & Maven
+/target/
+/mvnw
+/mvnw.cmd
+/.mvn/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.bin/
+/.metadata/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# H2 Database
+*.h2.db
+*.mv.db
+*.trace.db
+*.lock.db
+/data/
+
+# Uploads
+/uploads/
+
+# Logs
+*.log
+/logs/
+
+# Build output
+/build/
+/out/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Static resources cache
+/static/cache/
+
+# Docker
+/docker/
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Maven wrapper
+/mvnw
+/mvnw.cmd
+/.mvn/wrapper/

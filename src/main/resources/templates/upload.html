@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: base-page}">
+<head>
+    <title th:text="${pageTitle}">Upload Image - Claudinary</title>
+    <style>
+        .upload-zone {
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-zone:hover {
+            border-color: #0d6efd;
+            background-color: #f8f9fa;
+        }
+        .upload-zone.dragover {
+            border-color: #0d6efd;
+            background-color: #e7f1ff;
+        }
+        .preview-container {
+            display: none;
+            margin-top: 15px;
+        }
+        .preview-container.show {
+            display: block;
+        }
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <main class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="mb-4">Upload Image</h2>
+                
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form id="uploadForm" action="/api/images/upload" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label">Select Project</label>
+                                <select class="form-select" name="projectId" id="projectSelect">
+                                    <option value="">Default Project</option>
+                                    <option th:each="project : ${projects}" 
+                                            th:value="${project.id}" 
+                                            th:text="${project.name}" 
+                                            th:selected="${project.isDefault}"></option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Image File *</label>
+                                <div class="upload-zone" id="uploadZone">
+                                    <input type="file" class="form-control d-none" id="fileInput" 
+                                           name="file" accept="image/*" required>
+                                    <i class="bi bi-cloud-arrow-up fs-1 text-primary"></i>
+                                    <p class="mt-2">Drag & drop images here or click to browse</p>
+                                    <small class="text-muted">
+                                        Supported formats: JPG, JPEG, PNG, GIF, BMP, TIFF, WEBP, HEIC, HEIF, SVG, ICO, PSD, PDF<br>
+                                        Max size: 10MB
+                                    </small>
+                                </div>
+                                
+                                <div class="preview-container" id="previewContainer">
+                                    <img id="imagePreview" src="" alt="Preview" class="img-fluid">
+                                    <div class="mt-2">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                onclick="removeImage()">
+                                            <i class="bi bi-trash"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="title" name="title"
+                                       placeholder="Optional image title">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" 
+                                          rows="3" placeholder="Optional image description"></textarea>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="isPublic" name="isPublic" value="true" checked>
+                                <label class="form-check-label" for="isPublic">
+                                    Public Image (visible to everyone)
+                                </label>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary" id="uploadButton" disabled>
+                                    <i class="bi bi-upload"></i> Upload Image
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Upload Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li>Images will be automatically converted to WebP format for optimal web delivery</li>
+                                <li>Original images are preserved and available for download</li>
+                                <li>Thumbnails are generated for faster loading in galleries</li>
+                                <li>You can organize images into different projects/categories</li>
+                                <li>Each user gets 100MB of free storage space</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const uploadButton = document.getElementById('uploadButton');
+        
+        // Handle drag and drop
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+        
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+        
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                handleFiles(e.dataTransfer.files);
+            }
+        });
+        
+        // Handle click to browse
+        uploadZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        // Handle file selection
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFiles(e.target.files);
+            }
+        });
+        
+        function handleFiles(files) {
+            const file = files[0];
+            
+            // Validate file
+            if (!file.type.startsWith('image/') && !['.heic', '.heif', '.svg', '.ico', '.psd', '.pdf'].some(ext => file.name.toLowerCase().endsWith(ext))) {
+                alert('Please select a valid image file.');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size exceeds 10MB limit.');
+                return;
+            }
+            
+            // Show preview
+            showPreview(file);
+            uploadButton.disabled = false;
+        }
+        
+        function showPreview(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                previewContainer.classList.add('show');
+            };
+            
+            // Try to read as image
+            try {
+                reader.readAsDataURL(file);
+            } catch (error) {
+                // For non-image files, show file info instead
+                previewContainer.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="bi bi-file-earmark"></i> ${file.name} (${formatFileSize(file.size)})
+                    </div>
+                `;
+                previewContainer.classList.add('show');
+            }
+        }
+        
+        function removeImage() {
+            fileInput.value = '';
+            previewContainer.classList.remove('show');
+            imagePreview.src = '';
+            uploadButton.disabled = true;
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+        
+        // Handle form submission
+        document.getElementById('uploadForm').addEventListener('submit', (e) => {
+            if (!fileInput.value) {
+                e.preventDefault();
+                alert('Please select an image file.');
+            }
+        });
+    </script>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

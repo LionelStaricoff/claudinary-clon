@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: base-page}">
+<head>
+    <title th:text="${pageTitle}">My Profile - Claudinary</title>
+    <style>
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .progress-bar-container {
+            margin-top: 10px;
+        }
+        .info-section {
+            margin-bottom: 20px;
+        }
+        .action-btn {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <main class="container mt-4">
+        <div class="profile-header">
+            <div class="text-center">
+                <div class="profile-avatar">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <h2 th:text="${currentUser.username}"></h2>
+                <p class="mb-0" th:text="${currentUser.email}"></p>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header">
+                        <h5>Storage Usage</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <div class="stat-number" 
+                                 th:text="${#numbers.formatDecimal(storageUsed / (1024 * 1024), 1, 2)} + ' MB'"></div>
+                            <small class="text-muted">of 100 MB used</small>
+                            
+                            <div class="progress-bar-container">
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                         th:style="width: ${storageUsed * 100 / (1024 * 1024 * 100)}%"
+                                         aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header">
+                        <h5>Total Images</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <div class="stat-number" th:text="${imageCount}"></div>
+                            <small class="text-muted">images uploaded</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header">
+                        <h5>Projects</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <div class="stat-number" th:text="${projectCount}"></div>
+                            <small class="text-muted">projects created</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5>Profile Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-section">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <strong>Username:</strong>
+                                </div>
+                                <div class="col-sm-8" th:text="${currentUser.username}"></div>
+                            </div>
+                        </div>
+                        <div class="info-section">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <strong>Email:</strong>
+                                </div>
+                                <div class="col-sm-8" th:text="${currentUser.email}"></div>
+                            </div>
+                        </div>
+                        <div class="info-section">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <strong>Name:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    <span th:text="${currentUser.firstName}"></span>
+                                    <span th:if="${currentUser.firstName != null && currentUser.lastName != null}"> </span>
+                                    <span th:text="${currentUser.lastName}"></span>
+                                    <span th:if="${currentUser.firstName == null && currentUser.lastName == null}">Not provided</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-section">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <strong>Account Created:</strong>
+                                </div>
+                                <div class="col-sm-8" th:text="${#temporals.format(currentUser.createdAt, 'MMM dd, yyyy HH:mm')}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5>Account Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap">
+                            <a href="/upload" class="btn btn-outline-primary action-btn">
+                                <i class="bi bi-upload me-1"></i> Upload Image
+                            </a>
+                            <a href="/gallery" class="btn btn-outline-primary action-btn">
+                                <i class="bi bi-images me-1"></i> View Gallery
+                            </a>
+                            <a href="/projects" class="btn btn-outline-primary action-btn">
+                                <i class="bi bi-folder me-1"></i> Manage Projects
+                            </a>
+                            <a href="/settings" class="btn btn-outline-secondary action-btn">
+                                <i class="bi bi-gear me-1"></i> Settings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

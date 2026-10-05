@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: base-page}">
+<head>
+    <title th:text="${pageTitle}">About - Claudinary</title>
+    <style>
+        .feature-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #0d6efd;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            padding: 40px;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .stats-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .team-section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <main class="container mt-4">
+        <div class="hero-section">
+            <div class="text-center">
+                <h1>Claudinary - Self-Hosted Image Hosting</h1>
+                <p class="lead mb-0">A complete alternative to Cloudinary that you can host yourself</p>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4 class="mb-3">What is Claudinary?</h4>
+                <p>
+                    Claudinary is a self-hosted image hosting platform that provides similar functionality 
+                    to Cloudinary but with complete control over your data and infrastructure. 
+                </p>
+                <p>
+                    Unlike traditional cloud services, Claudinary runs on your own servers, giving you 
+                    full ownership of your images and data without relying on third-party services.
+                </p>
+            </div>
+        </div>
+        
+        <h3 class="mb-4">Features</h3>
+        
+        <div class="row mb-5">
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card shadow-sm h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-cloud-arrow-up"></i>
+                    </div>
+                    <h5>Easy Upload</h5>
+                    <p>Drag & drop interface for uploading images with support for multiple formats including JPG, PNG, GIF, TIFF, WEBP, HEIC, HEIF, and more.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card shadow-sm h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h5>WebP Conversion</h5>
+                    <p>Automatically converts uploaded images to WebP format for optimal web delivery while preserving original files.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card shadow-sm h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-folder"></i>
+                    </div>
+                    <h5>Project Organization</h5>
+                    <p>Organize your images into projects/folders to keep your content structured and easily accessible.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card shadow-sm h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-link-45deg"></i>
+                    </div>
+                    <h5>Direct URLs</h5>
+                    <p>Each image gets a unique URL that can be embedded directly in your websites and applications.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card shadow-sm h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-database"></i>
+                    </div>
+                    <h5>Database Storage</h5>
+                    <p>All image metadata is stored in a database with H2 (development) or PostgreSQL (production) support.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card shadow-sm h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h5>JWT Authentication</h5>
+                    <p>Secure authentication system with JWT tokens for API access and user sessions.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-section">
+            <h3 class="text-center mb-4">Supported Formats</h3>
+            <div class="row text-center">
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>JPG</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>JPEG</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>PNG</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>GIF</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>BMP</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>TIFF</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>WEBP</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>HEIC</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>HEIF</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>SVG</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>ICO</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 mb-3">
+                    <div class="p-3 bg-white rounded shadow-sm">
+                        <strong>PSD</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="team-section">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="mb-3">Technologies Used</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><strong>Backend:</strong> Spring Boot 4.1.1, Java 25</li>
+                                <li class="mb-2"><strong>Frontend:</strong> Thymeleaf, Bootstrap 5</li>
+                                <li class="mb-2"><strong>Security:</strong> JWT, Spring Security</li>
+                                <li class="mb-2"><strong>Database:</strong> H2, PostgreSQL</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><strong>Image Processing:</strong> Thumbnailator, ImageIO</li>
+                                <li class="mb-2"><strong>API Documentation:</strong> SpringDoc OpenAPI</li>
+                                <li class="mb-2"><strong>Build Tool:</strong> Maven</li>
+                                <li class="mb-2"><strong>Containerization:</strong> Docker</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

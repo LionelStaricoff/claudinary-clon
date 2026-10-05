@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: base-page}">
+<head>
+    <title th:text="${pageTitle}">Access Denied - Claudinary</title>
+    <style>
+        .error-container {
+            text-align: center;
+            padding: 40px;
+        }
+        .error-icon {
+            font-size: 4rem;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+        .error-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .error-message {
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        .error-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <main class="container mt-5">
+        <div class="error-container">
+            <div class="error-icon">
+                <i class="bi bi-shield-slash"></i>
+            </div>
+            <h1 class="error-title">Access Denied</h1>
+            <p class="error-message">You don't have permission to access this page.</p>
+            
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary">
+                    <i class="bi bi-house me-1"></i> Go to Home
+                </a>
+                <a href="/login" class="btn btn-outline-secondary">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

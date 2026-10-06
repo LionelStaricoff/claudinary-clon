@@ -12,11 +12,11 @@ import com.openlabmx.claudinary.exception.UnauthorizedException;
 import com.openlabmx.claudinary.repository.RoleRepository;
 import com.openlabmx.claudinary.repository.UserRepository;
 import com.openlabmx.claudinary.security.JwtTokenProvider;
+import com.openlabmx.claudinary.security.JwtUserDetails;
 import com.openlabmx.claudinary.service.AuthService;
 import com.openlabmx.claudinary.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +37,6 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     
     private static final Set<String> invalidatedTokens = new HashSet<>();
@@ -76,14 +75,12 @@ public class AuthServiceImpl implements AuthService {
         user.setFailedLoginAttempts(0);
         userRepository.save(user);
         
-        // Authenticate and generate token
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                user.getUsername(),
-                request.getPassword()
-            )
-        );
-        
+        // Establish authentication manually — password already verified above and
+        // there is no UserDetailsService bean registered, so invoking
+        // AuthenticationManager here would recurse or throw ProviderNotFoundException.
+        JwtUserDetails userDetails = new JwtUserDetails(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
         String accessToken = jwtTokenProvider.generateAccessToken(user);

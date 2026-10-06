@@ -85,16 +85,20 @@ public class ViewController {
     public String loginPost(@Valid @ModelAttribute("loginRequest") UserLoginRequest loginRequest,
                           BindingResult bindingResult,
                           HttpSession session,
+                          jakarta.servlet.http.HttpServletResponse response,
                           RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "login";
         }
         
         try {
-            authService.login(loginRequest);
+            com.openlabmx.claudinary.dto.response.JwtResponse jwt = authService.login(loginRequest);
+            response.addHeader("Set-Cookie",
+                "token=" + jwt.getAccessToken() + "; Path=/; HttpOnly; Max-Age=" + jwt.getExpiresIn() + "; SameSite=Lax");
             return "redirect:/";
         } catch (Exception e) {
-            bindingResult.rejectValue("username", "error", e.getMessage());
+            bindingResult.rejectValue("usernameOrEmail", "error",
+                e.getMessage() != null ? e.getMessage() : "Invalid credentials");
             return "login";
         }
     }
@@ -125,12 +129,20 @@ public class ViewController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
+    public String logout(HttpServletRequest request,
+                        jakarta.servlet.http.HttpServletResponse response) {
+        String token = null;
+        if (request.getCookies() != null) {
+            for (jakarta.servlet.http.Cookie c : request.getCookies()) {
+                if ("token".equals(c.getName())) { token = c.getValue(); break; }
+            }
+        }
+        if (token == null) {
+            String header = request.getHeader("Authorization");
+            if (header != null && header.startsWith("Bearer ")) token = header.substring(7);
         }
         authService.logout(token);
+        response.addHeader("Set-Cookie", "token=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax");
         return "redirect:/login";
     }
 

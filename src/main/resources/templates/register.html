@@ -69,6 +69,9 @@
                                 <input type="password" class="form-control" id="password" 
                                        th:field="*{password}" required
                                        placeholder="Enter your password">
+                                <small class="form-text text-muted">
+                                    Mínimo 8 caracteres, con al menos una mayúscula, una minúscula y un dígito.
+                                </small>
                                 <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                             </div>
                             

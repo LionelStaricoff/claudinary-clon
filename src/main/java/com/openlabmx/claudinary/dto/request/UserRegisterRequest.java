@@ -9,7 +9,8 @@ public class UserRegisterRequest {
     @NotBlank @Email @Size(max = 100)
     private String email;
     @NotBlank @Size(min = 8, max = 100)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
+             message = "Debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una minúscula y un dígito")
     private String password;
     @Size(max = 50)
     private String firstName;

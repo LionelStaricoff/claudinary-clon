@@ -17,6 +17,16 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                        HttpServletResponse response, 
                        AuthenticationException authException) throws IOException, ServletException {
         
+        String accept = request.getHeader("Accept");
+        String path = request.getRequestURI();
+        boolean isApiPath = path != null && path.startsWith("/api/");
+        boolean wantsHtml = accept != null && accept.contains("text/html");
+
+        if (wantsHtml && !isApiPath) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: " + authException.getMessage());
     }
 }

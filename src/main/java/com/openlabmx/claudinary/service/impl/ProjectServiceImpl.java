@@ -9,6 +9,7 @@ import com.openlabmx.claudinary.exception.ResourceNotFoundException;
 import com.openlabmx.claudinary.repository.ProjectRepository;
 import com.openlabmx.claudinary.repository.UserRepository;
 import com.openlabmx.claudinary.service.ProjectService;
+import com.openlabmx.claudinary.service.UserService;
 import com.openlabmx.claudinary.util.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +32,12 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final FileStorageService fileStorageService;
+    private final UserService userService;
 
     @Override
     @Transactional
     public ProjectResponse createProject(ProjectRequest request) {
-        User user = getCurrentUser();
+        User user = userService.getCurrentUserEntity();
         
         if (projectRepository.existsByUserIdAndName(user.getId(), request.getName())) {
             throw new BadRequestException("Project with name '" + request.getName() + "' already exists for this user");

@@ -3,10 +3,13 @@ package com.openlabmx.claudinary.service.impl;
 import com.openlabmx.claudinary.dto.request.UserLoginRequest;
 import com.openlabmx.claudinary.dto.request.UserRegisterRequest;
 import com.openlabmx.claudinary.dto.response.JwtResponse;
+import com.openlabmx.claudinary.entity.Role;
 import com.openlabmx.claudinary.entity.User;
+import com.openlabmx.claudinary.enums.RoleType;
 import com.openlabmx.claudinary.exception.BadRequestException;
 import com.openlabmx.claudinary.exception.ResourceNotFoundException;
 import com.openlabmx.claudinary.exception.UnauthorizedException;
+import com.openlabmx.claudinary.repository.RoleRepository;
 import com.openlabmx.claudinary.repository.UserRepository;
 import com.openlabmx.claudinary.security.JwtTokenProvider;
 import com.openlabmx.claudinary.service.AuthService;
@@ -32,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
@@ -123,6 +127,10 @@ public class AuthServiceImpl implements AuthService {
         user.setIsActive(true);
         user.setIsLocked(false);
         user.setFailedLoginAttempts(0);
+        
+        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
+            .orElseThrow(() -> new ResourceNotFoundException("User role not found"));
+        user.addRole(userRole);
         
         // Save user first
         user = userRepository.save(user);

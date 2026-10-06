@@ -444,3 +444,8 @@ body {
     background: #dee2e6;
     margin: 20px 0;
 }
+
+/* Hero gradient background (Bootstrap 5.3 no longer ships bg-gradient-primary) */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}

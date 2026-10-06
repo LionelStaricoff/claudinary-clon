@@ -21,7 +21,7 @@
                 <ul class="list-unstyled">
                     <li class="mb-2"><a href="/" class="text-white text-decoration-none">Home</a></li>
                     <li class="mb-2"><a href="/about" class="text-white text-decoration-none">About</a></li>
-                    <li class="mb-2"><a href="/api/v3/api-docs" class="text-white text-decoration-none">API Docs</a></li>
+                    <li class="mb-2"><a href="/swagger-ui.html" class="text-white text-decoration-none">API Docs</a></li>
                     <li class="mb-2" sec:authorize="isAuthenticated()"><a th:href="@{/gallery}" class="text-white text-decoration-none">Gallery</a></li>
                 </ul>
             </div>
@@ -73,10 +73,6 @@
             <p class="mb-0 small text-muted">
                 &copy; 2024 ImageHost. All rights reserved.
             </p>
-            <div class="small">
-                <a href="/terms" class="text-muted text-decoration-none me-3">Terms</a>
-                <a href="/privacy" class="text-muted text-decoration-none">Privacy</a>
-            </div>
         </div>
     </div>
 </footer>

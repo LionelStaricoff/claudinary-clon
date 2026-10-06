@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${status} + ' - ImageHost'">Error - ImageHost</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <main class="container" style="min-height: 60vh; display: flex; align-items: center;">
+        <div class="row justify-content-center w-100">
+            <div class="col-md-8 col-lg-6 text-center">
+                <div class="py-5">
+                    <i class="fas"
+                       th:classappend="${status == 404 ? 'fa-compass' : (status == 403 ? 'fa-lock' : (status == 401 ? 'fa-user-lock' : 'fa-exclamation-triangle'))}"
+                       style="font-size: 5rem; color: #6c757d;"></i>
+                    <h1 class="display-1 fw-bold mt-3" th:text="${status}">500</h1>
+                    <h2 class="h4 text-muted mb-4" th:text="${error}">Algo salió mal</h2>
+                    <p class="text-muted mb-4" th:if="${message != null && !#strings.isEmpty(message)}" th:text="${message}"></p>
+                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                        <a th:href="@{/}" class="btn btn-primary">
+                            <i class="fas fa-home me-2"></i> Volver al inicio
+                        </a>
+                        <a th:if="${status == 401 || status == 403}" th:href="@{/login}" class="btn btn-outline-primary">
+                            <i class="fas fa-sign-in-alt me-2"></i> Iniciar sesión
+                        </a>
+                    </div>
+                    <p class="small text-muted mt-4 mb-0" th:if="${path != null}" th:text="'Ruta solicitada: ' + ${path}"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

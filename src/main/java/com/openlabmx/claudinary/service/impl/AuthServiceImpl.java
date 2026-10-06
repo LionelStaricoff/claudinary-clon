@@ -240,6 +240,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void invalidateToken(String token) {
+        if (token == null) return;
         invalidatedTokens.add(token);
         log.debug("Invalidated token: {}", token.substring(0, Math.min(20, token.length())) + "...");
     }

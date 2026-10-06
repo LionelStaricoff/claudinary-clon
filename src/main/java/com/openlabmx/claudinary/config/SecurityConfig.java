@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .requestMatchers("/index.html").permitAll()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/register").permitAll()
+                .requestMatchers("/logout").permitAll()
                 .requestMatchers("/about").permitAll()
                 .requestMatchers("/access-denied").permitAll()
                 // Vite development server routes

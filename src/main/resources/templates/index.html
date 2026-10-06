@@ -202,7 +202,7 @@
                     </div>
                 </div>
                 
-                <div class="text-center py-4" th:if="${!recentImages || recentImages.empty}">
+                <div class="text-center py-4" th:if="${recentImages == null || recentImages.empty}">
                     <div class="py-5">
                         <i class="fas fa-images fa-3x text-muted mb-3"></i>
                         <h4 class="text-muted">No images yet</h4>
@@ -251,7 +251,7 @@
                     </div>
                 </div>
                 
-                <div class="text-center py-4" th:if="${!projects || projects.empty}">
+                <div class="text-center py-4" th:if="${projects == null || projects.empty}">
                     <div class="py-5">
                         <i class="fas fa-folder fa-3x text-muted mb-3"></i>
                         <h4 class="text-muted">No projects yet</h4>

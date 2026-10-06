@@ -26,12 +26,13 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final CorsConfig corsConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
-            .cors(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/users/register").permitAll()
@@ -48,8 +49,16 @@ public class SecurityConfig {
                 .requestMatchers("/webjars/**").permitAll()
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/index").permitAll()
+                .requestMatchers("/index.html").permitAll()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/register").permitAll()
+                .requestMatchers("/about").permitAll()
+                .requestMatchers("/access-denied").permitAll()
+                // Vite development server routes
+                .requestMatchers("/props").permitAll()
+                .requestMatchers("/v1/models").permitAll()
+                .requestMatchers("/sw.js").permitAll()
+                .requestMatchers("/workbox-**").permitAll()
                 .requestMatchers("/upload").authenticated()
                 .requestMatchers("/gallery").authenticated()
                 .requestMatchers("/projects").authenticated()

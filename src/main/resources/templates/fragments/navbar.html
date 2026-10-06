@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:fragment="navbar">
     <div class="container">
         <!-- Brand -->
         <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
@@ -58,7 +58,7 @@
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="@{/profile}" th:class="${active == 'profile' ? 'active' : ''}">
                         <i class="fas fa-user me-1"></i> 
-                        <span th:text="${#authentication.name}"></span>
+                        <span th:text="${#authentication != null ? #authentication.name : ''}"></span>
                     </a>
                 </li>
                 

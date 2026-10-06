@@ -4,253 +4,289 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ImageHost - Self-Hosted Image Hosting</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    
+    <!-- Meta tags -->
+    <meta name="description" content="Self-hosted image hosting service with WebP conversion and project organization">
+    <meta name="keywords" content="image hosting, cloudinary alternative, webp conversion, image storage">
 </head>
 <body>
-    <div th:replace="~{base :: head}"></div>
+    <!-- Flash Messages -->
+    <div th:if="${success}" class="container mt-3">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
     
-    <div th:replace="~{base :: body}" th:with="
-        title='ImageHost - Self-Hosted Image Hosting',
-        content=~{::main-content},
-        scripts=''
-    ">
-        <main role="main" class="main-content">
-            <!-- Hero Section -->
-            <section class="bg-gradient-primary text-white py-5">
-                <div class="container py-4">
-                    <div class="row align-items-center">
-                        <div class="col-lg-7">
-                            <h1 class="display-4 fw-bold mb-3">
-                                <i class="fas fa-image me-3"></i>ImageHost
-                            </h1>
-                            <p class="lead mb-4">
-                                Your self-hosted Cloudinary alternative. Upload, convert, organize, and serve images at scale.
-                            </p>
-                            <div class="d-flex gap-3 flex-wrap">
-                                <a sec:authorize="isAuthenticated()" th:href="@{/upload}" class="btn btn-light btn-lg px-4">
-                                    <i class="fas fa-upload me-2"></i> Upload Images
-                                </a>
-                                <a sec:authorize="isAuthenticated()" th:href="@{/gallery}" class="btn btn-outline-light btn-lg px-4">
-                                    <i class="fas fa-images me-2"></i> My Gallery
-                                </a>
-                                <a sec:authorize="!isAuthenticated()" th:href="@{/register}" class="btn btn-light btn-lg px-4">
-                                    <i class="fas fa-user-plus me-2"></i> Get Started
-                                </a>
-                            </div>
-                            
-                            <!-- Stats -->
-                            <div sec:authorize="isAuthenticated()" class="mt-4">
-                                <div class="row text-center">
-                                    <div class="col-4">
-                                        <h3 class="mb-0" th:text="${totalImages ?: 0}"></h3>
-                                        <p class="mb-0 small">Images</p>
-                                    </div>
-                                    <div class="col-4">
-                                        <h3 class="mb-0" th:text="${totalProjects ?: 0}"></h3>
-                                        <p class="mb-0 small">Projects</p>
-                                    </div>
-                                    <div class="col-4">
-                                        <h3 class="mb-0">
-                                            <span th:text="${#numbers.formatDecimal(storageUsed ?: 0, 1, 2)} + ' MB'"></span>
-                                        </h3>
-                                        <p class="mb-0 small">Used</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 d-none d-lg-block">
-                            <div class="position-relative">
-                                <div class="rounded-circle bg-white bg-opacity-10 p-4 d-inline-block">
-                                    <i class="fas fa-images text-primary display-4"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Features Section -->
-            <section class="py-5">
-                <div class="container">
-                    <div class="text-center mb-5">
-                        <h2 class="fw-bold">Powerful Features</h2>
-                        <p class="text-muted">Everything you need for professional image hosting</p>
-                    </div>
-                    
-                    <div class="row g-4">
-                        <div class="col-md-6 col-lg-3">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body text-center p-4">
-                                    <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-                                        <i class="fas fa-images text-primary fa-2x"></i>
-                                    </div>
-                                    <h4 class="mb-2">Multi-Format Support</h4>
-                                    <p class="text-muted small mb-0">
-                                        JPEG, PNG, GIF, TIFF, HEIC, HEIF, SVG, ICO, PSD, PDF and more
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 col-lg-3">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body text-center p-4">
-                                    <div class="bg-success bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-                                        <i class="fas fa-file-image text-success fa-2x"></i>
-                                    </div>
-                                    <h4 class="mb-2">WebP Conversion</h4>
-                                    <p class="text-muted small mb-0">
-                                        Automatic conversion to WebP for optimized delivery
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 col-lg-3">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body text-center p-4">
-                                    <div class="bg-info bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-                                        <i class="fas fa-folder text-info fa-2x"></i>
-                                    </div>
-                                    <h4 class="mb-2">Project Organization</h4>
-                                    <p class="text-muted small mb-0">
-                                        Organize images into projects/folders
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 col-lg-3">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body text-center p-4">
-                                    <div class="bg-warning bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-                                        <i class="fas fa-database text-warning fa-2x"></i>
-                                    </div>
-                                    <h4 class="mb-2">Database Storage</h4>
-                                    <p class="text-muted small mb-0">
-                                        Metadata stored in database for easy management
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Recent Images Section -->
-            <section class="bg-light py-5" sec:authorize="isAuthenticated()">
-                <div class="container">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 class="fw-bold mb-0">Recent Images</h2>
-                        <a th:href="@{/gallery}" class="btn btn-outline-primary">
-                            <i class="fas fa-images me-2"></i> View All
-                        </a>
-                    </div>
-                    
-                    <div class="row g-4" th:if="${recentImages && !recentImages.empty}">
-                        <div class="col-md-6 col-lg-4" th:each="image : ${recentImages}">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="position-relative">
-                                    <img th:src="${image.fullWebpUrl}" 
-                                         th:alt="${image.originalFilename}" 
-                                         class="card-img-top rounded-0" 
-                                         style="height: 200px; object-fit: cover;">
-                                    <span class="badge bg-primary position-absolute top-3 end-3">
-                                        <i class="fas fa-file-image me-1"></i> 
-                                        <span th:text="${image.originalFormat}"></span>
-                                    </span>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title mb-1" th:text="${image.originalFilename}"></h6>
-                                    <p class="card-text small text-muted mb-2">
-                                        <span th:text="${image.width} + 'x' + ${image.height}"></span> | 
-                                        <span th:text="${#numbers.formatDecimal(image.fileSize, 1, 2)} + ' KB'"></span>
-                                    </p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted" th:text="${#temporals.format(image.createdAt, 'MMM dd, yyyy')}"></small>
-                                        <a th:href="${image.fullUrl}" class="btn btn-sm btn-outline-secondary">
-                                            <i class="fas fa-download"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center py-4" th:if="${!recentImages || recentImages.empty}">
-                        <div class="py-5">
-                            <i class="fas fa-images fa-3x text-muted mb-3"></i>
-                            <h4 class="text-muted">No images yet</h4>
-                            <p class="text-muted">Start by uploading your first image</p>
-                            <a th:href="@{/upload}" class="btn btn-primary">
-                                <i class="fas fa-upload me-2"></i> Upload Now
+    <div th:if="${error}" class="container mt-3">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    
+    <main role="main" class="container-fluid">
+        <!-- Hero Section -->
+        <section class="bg-gradient-primary text-white py-5">
+            <div class="container py-4">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <h1 class="display-4 fw-bold mb-3">
+                            <i class="fas fa-image me-3"></i>ImageHost
+                        </h1>
+                        <p class="lead mb-4">
+                            Your self-hosted Cloudinary alternative. Upload, convert, organize, and serve images at scale.
+                        </p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <a sec:authorize="isAuthenticated()" th:href="@{/upload}" class="btn btn-light btn-lg px-4">
+                                <i class="fas fa-upload me-2"></i> Upload Images
+                            </a>
+                            <a sec:authorize="isAuthenticated()" th:href="@{/gallery}" class="btn btn-outline-light btn-lg px-4">
+                                <i class="fas fa-images me-2"></i> My Gallery
+                            </a>
+                            <a sec:authorize="!isAuthenticated()" th:href="@{/register}" class="btn btn-light btn-lg px-4">
+                                <i class="fas fa-user-plus me-2"></i> Get Started
                             </a>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Projects Section -->
-            <section class="py-5" sec:authorize="isAuthenticated()">
-                <div class="container">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 class="fw-bold mb-0">Your Projects</h2>
-                        <a th:href="@{/projects}" class="btn btn-outline-primary">
-                            <i class="fas fa-folder me-2"></i> Manage Projects
-                        </a>
-                    </div>
-                    
-                    <div class="row g-4" th:if="${projects && !projects.empty}">
-                        <div class="col-md-6 col-lg-4" th:each="project : ${projects}">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start mb-3">
-                                        <div class="flex-grow-1">
-                                            <h5 class="card-title mb-1" th:text="${project.name}"></h5>
-                                            <p class="card-text small text-muted mb-2">
-                                                <span th:if="${project.isDefault}" class="badge bg-success me-2">Default</span>
-                                                <span th:text="${project.description ?: 'No description'}"></span>
-                                            </p>
-                                        </div>
-                                        <span class="badge bg-primary" th:text="${project.totalImages ?: 0} + ' images'"></span>
-                                    </div>
-                                    
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted" th:text="${#temporals.format(project.createdAt, 'MMM dd, yyyy')}"></small>
-                                        <a th:href="@{/gallery(projectId=${project.id})}" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-images me-1"></i> View
-                                        </a>
-                                    </div>
+                        
+                        <!-- Stats -->
+                        <div sec:authorize="isAuthenticated()" class="mt-4">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <h3 class="mb-0" th:text="${totalImages ?: 0}"></h3>
+                                    <p class="mb-0 small">Images</p>
+                                </div>
+                                <div class="col-4">
+                                    <h3 class="mb-0" th:text="${totalProjects ?: 0}"></h3>
+                                    <p class="mb-0 small">Projects</p>
+                                </div>
+                                <div class="col-4">
+                                    <h3 class="mb-0">
+                                        <span th:text="${#numbers.formatDecimal(storageUsed ?: 0, 1, 2)} + ' MB'"></span>
+                                    </h3>
+                                    <p class="mb-0 small">Used</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="text-center py-4" th:if="${!projects || projects.empty}">
-                        <div class="py-5">
-                            <i class="fas fa-folder fa-3x text-muted mb-3"></i>
-                            <h4 class="text-muted">No projects yet</h4>
-                            <p class="text-muted">Projects help you organize your images</p>
+                    <div class="col-lg-5 d-none d-lg-block">
+                        <div class="position-relative">
+                            <div class="rounded-circle bg-white bg-opacity-10 p-4 d-inline-block">
+                                <i class="fas fa-images text-primary display-4"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- API Documentation Section -->
-            <section class="bg-light py-5">
-                <div class="container text-center">
-                    <div class="rounded-circle bg-white shadow-sm p-4 d-inline-block mb-3">
-                        <i class="fas fa-code text-primary fa-2x"></i>
+        <!-- Features Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold">Powerful Features</h2>
+                    <p class="text-muted">Everything you need for professional image hosting</p>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+                                    <i class="fas fa-images text-primary fa-2x"></i>
+                                </div>
+                                <h4 class="mb-2">Multi-Format Support</h4>
+                                <p class="text-muted small mb-0">
+                                    JPEG, PNG, GIF, TIFF, HEIC, HEIF, SVG, ICO, PSD, PDF and more
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <h2 class="fw-bold mb-3">Developer API</h2>
-                    <p class="text-muted mb-4">
-                        Complete REST API for integrating image hosting into your applications
-                    </p>
-                    <a href="/swagger-ui.html" class="btn btn-primary btn-lg px-4">
-                        <i class="fas fa-book me-2"></i> View API Documentation
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-success bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+                                    <i class="fas fa-file-image text-success fa-2x"></i>
+                                </div>
+                                <h4 class="mb-2">WebP Conversion</h4>
+                                <p class="text-muted small mb-0">
+                                    Automatic conversion to WebP for optimized delivery
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-info bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+                                    <i class="fas fa-folder text-info fa-2x"></i>
+                                </div>
+                                <h4 class="mb-2">Project Organization</h4>
+                                <p class="text-muted small mb-0">
+                                    Organize images into projects/folders
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-warning bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+                                    <i class="fas fa-database text-warning fa-2x"></i>
+                                </div>
+                                <h4 class="mb-2">Database Storage</h4>
+                                <p class="text-muted small mb-0">
+                                    Metadata stored in database for easy management
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Images Section -->
+        <section class="bg-light py-5" sec:authorize="isAuthenticated()">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold mb-0">Recent Images</h2>
+                    <a th:href="@{/gallery}" class="btn btn-outline-primary">
+                        <i class="fas fa-images me-2"></i> View All
                     </a>
                 </div>
-            </section>
-        </main>
-    </div>
+                
+                <div class="row g-4" th:if="${recentImages != null && !recentImages.empty}">
+                    <div class="col-md-6 col-lg-4" th:each="image : ${recentImages}">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="position-relative">
+                                <img th:src="${image.fullWebpUrl}" 
+                                     th:alt="${image.originalFilename}" 
+                                     class="card-img-top rounded-0" 
+                                     style="height: 200px; object-fit: cover;">
+                                <span class="badge bg-primary position-absolute top-3 end-3">
+                                    <i class="fas fa-file-image me-1"></i> 
+                                    <span th:text="${image.originalFormat}"></span>
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title mb-1" th:text="${image.originalFilename}"></h6>
+                                <p class="card-text small text-muted mb-2">
+                                    <span th:text="${image.width} + 'x' + ${image.height}"></span> | 
+                                    <span th:text="${#numbers.formatDecimal(image.fileSize, 1, 2)} + ' KB'"></span>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted" th:text="${#temporals.format(image.createdAt, 'MMM dd, yyyy')}"></small>
+                                    <a th:href="${image.fullUrl}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center py-4" th:if="${!recentImages || recentImages.empty}">
+                    <div class="py-5">
+                        <i class="fas fa-images fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No images yet</h4>
+                        <p class="text-muted">Start by uploading your first image</p>
+                        <a th:href="@{/upload}" class="btn btn-primary">
+                            <i class="fas fa-upload me-2"></i> Upload Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="py-5" sec:authorize="isAuthenticated()">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold mb-0">Your Projects</h2>
+                    <a th:href="@{/projects}" class="btn btn-outline-primary">
+                        <i class="fas fa-folder me-2"></i> Manage Projects
+                    </a>
+                </div>
+                
+                <div class="row g-4" th:if="${projects != null && !projects.empty}">
+                    <div class="col-md-6 col-lg-4" th:each="project : ${projects}">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="flex-grow-1">
+                                        <h5 class="card-title mb-1" th:text="${project.name}"></h5>
+                                        <p class="card-text small text-muted mb-2">
+                                            <span th:if="${project.isDefault}" class="badge bg-success me-2">Default</span>
+                                            <span th:text="${project.description ?: 'No description'}"></span>
+                                        </p>
+                                    </div>
+                                    <span class="badge bg-primary" th:text="${project.totalImages ?: 0} + ' images'"></span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted" th:text="${#temporals.format(project.createdAt, 'MMM dd, yyyy')}"></small>
+                                    <a th:href="@{/gallery(projectId=${project.id})}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-images me-1"></i> View
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center py-4" th:if="${!projects || projects.empty}">
+                    <div class="py-5">
+                        <i class="fas fa-folder fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No projects yet</h4>
+                        <p class="text-muted">Projects help you organize your images</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Documentation Section -->
+        <section class="bg-light py-5">
+            <div class="container text-center">
+                <div class="rounded-circle bg-white shadow-sm p-4 d-inline-block mb-3">
+                    <i class="fas fa-code text-primary fa-2x"></i>
+                </div>
+                <h2 class="fw-bold mb-3">Developer API</h2>
+                <p class="text-muted mb-4">
+                    Complete REST API for integrating image hosting into your applications
+                </p>
+                <a href="/swagger-ui.html" class="btn btn-primary btn-lg px-4">
+                    <i class="fas fa-book me-2"></i> View API Documentation
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script th:src="@{/js/app.js}"></script>
 </body>
 </html>

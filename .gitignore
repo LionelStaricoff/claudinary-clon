@@ -62,3 +62,6 @@ Thumbs.db
 /mvnw
 /mvnw.cmd
 /.mvn/wrapper/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/

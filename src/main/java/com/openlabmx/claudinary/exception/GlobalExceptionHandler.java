@@ -170,16 +170,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<ErrorResponse> handleMaxUploadSize(MaxUploadSizeExceededException ex, WebRequest request) {
+    @Override
+    protected ResponseEntity<Object> handleMaxUploadSizeExceededException(
+            MaxUploadSizeExceededException ex, HttpHeaders headers, 
+            HttpStatusCode status, WebRequest request) {
+        
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.PAYLOAD_TOO_LARGE.value())
+                .status(413)
                 .error("File Too Large")
                 .message("File size exceeds the maximum limit of " + (ex.getMaxUploadSize() / (1024 * 1024)) + "MB")
                 .path(request.getDescription(false))
                 .build();
-        return new ResponseEntity<>(error, HttpStatus.PAYLOAD_TOO_LARGE);
+        return new ResponseEntity<>(error, HttpStatus.valueOf(413));
     }
 
     @Override
